@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { router } from 'expo-router';
 import { 
   View, 
   Text, 
@@ -8,6 +9,7 @@ import {
   TouchableOpacity, 
   Dimensions,
   Share,
+  Alert,
   Linking,
   Platform
 } from 'react-native';
@@ -31,6 +33,15 @@ const PropertyDetailScreen = ({ route, navigation }) => {
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
     // TODO: Update favorite status in the backend
+  };
+
+  const handleListerShare = () => {
+    const propertyId = Number(property?.id);
+    if (!Number.isSafeInteger(propertyId) || propertyId <= 0) {
+      Alert.alert('Sharing unavailable', 'Open a saved OHLAM property to share.');
+      return;
+    }
+    router.push({ pathname: '/properties/share/[id]', params: { id: String(propertyId) } });
   };
 
   const handleShare = async () => {
@@ -85,9 +96,19 @@ const PropertyDetailScreen = ({ route, navigation }) => {
           <TouchableOpacity 
             style={[styles.actionButton, { marginRight: 15 }]}
             onPress={handleShare}
+            accessibilityLabel="Share this property"
           >
             <Ionicons name="share-social-outline" size={20} color="#333" />
           </TouchableOpacity>
+          {property?.is_owner === true && (
+            <TouchableOpacity
+              style={[styles.actionButton, { marginRight: 15 }]}
+              onPress={handleListerShare}
+              accessibilityLabel="Share my listing to social media"
+            >
+              <Ionicons name="megaphone-outline" size={20} color="#333" />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity 
             style={styles.actionButton}
             onPress={toggleFavorite}
