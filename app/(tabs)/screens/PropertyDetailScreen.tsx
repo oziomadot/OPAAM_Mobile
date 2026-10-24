@@ -95,11 +95,20 @@ const PropertyDetailScreen = ({ route, navigation }) => {
         <View style={styles.headerActions}>
           <TouchableOpacity 
             style={[styles.actionButton, { marginRight: 15 }]}
-            onPress={handleListerShare}
-            accessibilityLabel="Share my property to social media"
+            onPress={handleShare}
+            accessibilityLabel="Share this property"
           >
             <Ionicons name="share-social-outline" size={20} color="#333" />
           </TouchableOpacity>
+          {property?.is_owner === true && (
+            <TouchableOpacity
+              style={[styles.actionButton, { marginRight: 15 }]}
+              onPress={handleListerShare}
+              accessibilityLabel="Share my listing to social media"
+            >
+              <Ionicons name="megaphone-outline" size={20} color="#333" />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity 
             style={styles.actionButton}
             onPress={toggleFavorite}
